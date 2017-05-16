@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>test socket</title>
+    <meta charset="UTF-8">
+    <script src="socket.io.js"></script>
+    <script src="js/htmlformat.js"></script>
+    <script src="js/newjsformat.js"></script>
+    <script>
+        function sendRequest() {
+
+            socket.on('event', function(data){});
+            socket.on('disconnect', function(){});
+
+        }
+
+
+
+    </script>
+    <script>
+        function do_beautify() {
+
+            var socket = io('http://192.168.101.154:3001');
+            var circle = 'circle';
+            var json = {
+                "u":"123"
+            };
+            socket.on('connect', function(){
+                console.log("connect done ");
+                var t = document.getElementById("socket_name").value;
+                console.log(t);
+                socket.emit(t, json, function (data) {
+                    console.log(data);
+                    document.getElementById('content').value =JSON.stringify(data);
+                    console.log(data); // data will be 'woot'
+                    var js_source = JSON.stringify(data);
+                    var tabsize = 4;//这里可选 1,2,4,8
+                    var tabchar = '';
+                    if (tabsize == 1) {
+                        tabchar = '\t';
+                    }
+                    if (js_source && js_source.charAt(0) === '<') {
+                        document.getElementById('content').value = style_html(js_source, tabsize, tabchar, 80);
+                    } else {
+                        document.getElementById('content').value = js_beautify(js_source, tabsize, tabchar);
+                    }
+
+                });
+            });
+
+            return false;
+        }
+    </script>
+    <style>
+        .table {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 20px;
+            background-color: transparent;
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+        .form-control {
+            display: block;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            margin:auto;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        }
+        .btn-primary {
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+        }
+        .input-lg {
+            width: 95%;
+            height: 46px;
+            padding: 10px 16px;
+            font-size: 18px;
+            line-height: 1.3333333;
+            border-radius: 6px;
+            width: 90%;
+        }
+        .input-super-lg {
+            height: 777px;
+            width: 90%;
+            margin-top: 20px;
+            text-align: center;
+            margin: auto;
+            padding: 10px 16px;
+            font-size: 18px;
+            line-height: 1.3333333;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+<select id="socket_name"  class="form-control  ">
+    <option>circle</option>
+    <option>pCircle</option>
+</select>
+<!--<button onclick="sendRequest()">send</button>-->
+<input onclick="do_beautify();" class="form-control input-lg btn-primary" type="button" value="格式化">
+
+<textarea id="content" placeholder="" class="form-control input-super-lg"
+          rows="50"></textarea>
+</body>
+</html>
