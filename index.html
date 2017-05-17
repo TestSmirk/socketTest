@@ -6,32 +6,23 @@
     <script src="socket.io.js"></script>
     <script src="js/htmlformat.js"></script>
     <script src="js/newjsformat.js"></script>
-    <script>
-        function sendRequest() {
+    <script src="http://gosspublic.alicdn.com/aliyun-oss-sdk-4.3.0.min.js"></script>
 
-            socket.on('event', function(data){});
-            socket.on('disconnect', function(){});
-
-        }
-
-
-
-    </script>
     <script>
         function do_beautify() {
 
             var socket = io('http://192.168.101.154:3001');
             var circle = 'circle';
             var json = {
-                "u":"123"
+                "u": "123"
             };
-            socket.on('connect', function(){
+            socket.on('connect', function () {
                 console.log("connect done ");
                 var t = document.getElementById("socket_name").value;
                 console.log(t);
-                socket.emit(t, json, function (data) {
+                socket.emit(t, document.getElementById('socket_json').value, function (data) {
                     console.log(data);
-                    document.getElementById('content').value =JSON.stringify(data);
+                    document.getElementById('content').value = JSON.stringify(data);
                     console.log(data); // data will be 'woot'
                     var js_source = JSON.stringify(data);
                     var tabsize = 4;//这里可选 1,2,4,8
@@ -50,6 +41,72 @@
 
             return false;
         }
+
+        function changeSelect() {
+            var tempData = "";
+            var desc = "";
+            switch (document.getElementById("socket_name").value) {
+                case "circle":
+                    tempData = {
+                        "u": "591a6e39b378425740131404"
+                    };
+                    desc = "朋友圈：event: circle   获取朋友圈， 暂时获取所有朋友圈， 以后后台会做修改。msg:{u: '用户的_id'}";
+                    break;
+                case "pCircle":
+                    tempData = {
+                        "u": "591a6e39b378425740131404",
+                        "id": ""
+                    };
+                    desc = "msg:{id:'', u:''} id是朋友圈_id， u是用户id";
+                    break;
+                case "login":
+                    tempData = {m: '18311109521', p: 'C4CA4238A0B923820DCC509A6F75849B'};
+                    break;
+                case "register":
+                    tempData = {
+                        "m": "123",
+                        "p": "C4CA4238A0B923820DCC509A6F75849B"
+                    };
+                    break;
+                case "baseInfo":
+                    tempData = {"u": "userid"};
+                    break;
+                case "newCircle":
+                    tempData = {u: '591a6e39b378425740131404', c: '朋友圈内容', images: ["", "", ""]};
+
+                    break;
+                case "dCircle":
+                    tempData = {"id": ""};
+                    break;
+
+                case "rCircle":
+                    tempData = {"u": "", "t": "", "b": "", "id": ""};
+                    desc = "u: 用户id，t是回复人的id，b：回复的内容，id：是当前朋友圈的id";
+                    break;
+                case "newGroup":
+                    tempData = {
+                        "u": "591a6e39b378425740131404",
+                        "n": "group name 0",
+                        "img": "",
+                        "desc": "group desc ",
+                        "school": "school 0",
+                        "grade": "grade 0",
+                        "area":"area 0"
+                    };
+                    break;
+                case "sGroup":
+                    tempData = {"id": "591a6e39b378425740131404", "img": "d", "desc": "d"};
+                    break;
+                case "getGroup":
+                    tempData = {"id": "591a6e39b378425740131404"};
+                    break
+
+
+            }
+            document.getElementById("socket_json").value = JSON.stringify(tempData);
+            document.getElementById("socket-desc").value = desc;
+        }
+
     </script>
     <style>
         .table {
@@ -60,6 +117,7 @@
             border-spacing: 0;
             border-collapse: collapse;
         }
+
         .form-control {
             display: block;
             height: 34px;
@@ -68,7 +126,7 @@
             line-height: 1.42857143;
             color: #555;
             background-color: #fff;
-            margin:auto;
+            margin: auto;
             background-image: none;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -78,11 +136,13 @@
             -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
             transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
         }
+
         .btn-primary {
             color: #fff;
             background-color: #337ab7;
             border-color: #2e6da4;
         }
+
         .input-lg {
             width: 95%;
             height: 46px;
@@ -92,28 +152,84 @@
             border-radius: 6px;
             width: 90%;
         }
+
         .input-super-lg {
             height: 777px;
             width: 90%;
-            margin-top: 20px;
-            text-align: center;
             margin: auto;
             padding: 10px 16px;
             font-size: 18px;
             line-height: 1.3333333;
             border-radius: 6px;
         }
+
+        .socket-json {
+            height: 111px;
+            width: 90%;
+            margin: auto;
+            text-align: start;
+        }
     </style>
 </head>
 <body>
-<select id="socket_name"  class="form-control  ">
+<select id="socket_name" onchange="changeSelect()">
     <option>circle</option>
     <option>pCircle</option>
+    <option>login</option>
+    <option>register</option>
+    <option>baseInfo</option>
+    <option>newCircle</option>
+    <option>dCircle</option>
+    <option>rCircle</option>
+    <option>newGroup</option>
+    <option>sGroup</option>
+    <option>getGroup</option>
 </select>
+<b id="socket-desc"></b>
+<textarea id="socket_json" class="socket-json"></textarea>
 <!--<button onclick="sendRequest()">send</button>-->
-<input onclick="do_beautify();" class="form-control input-lg btn-primary" type="button" value="格式化">
+<input onclick="do_beautify();" class="form-control input-lg btn-primary" type="button" value="do">
+<input type="file" id="file" value="choose file" accept="image/gif, image/jpeg, image/png">
+<label type="text" id="socket-displayimage"></label>
 
+<script>
+    changeSelect();
+</script>
 <textarea id="content" placeholder="" class="form-control input-super-lg"
           rows="50"></textarea>
+
+<script>
+
+    var client = new OSS.Wrapper({
+        region: 'oss-cn-beijing',
+        accessKeyId: 'id',
+        accessKeySecret: 'scree',
+//            stsToken: '<Your securityToken(STS)>',
+        bucket: 'bucket'
+    });
+
+    client.list({
+        'max-keys': 10
+    }).then(function (result) {
+
+        console.log(result);
+    }).catch(function (err) {
+        console.log(err);
+    });
+
+
+    document.getElementById('file').addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        var storeAs = '591a6e39b378425740131404/headImage/' + new Date().getTime() + ".png";
+        console.log(file.name + ' => ' + storeAs);
+        client.multipartUpload(storeAs, file).then(function (result) {
+            console.log("---------<" + result.name);
+            document.getElementById("socket-displayimage").innerHTML = result.name;
+            console.log(result);
+        }).catch(function (err) {
+            console.log(err);
+        });
+    });
+</script>
 </body>
 </html>
