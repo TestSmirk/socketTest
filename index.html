@@ -43,7 +43,7 @@
         }
 
         function changeSelect() {
-            var tempData = "";
+            var tempData = {};
             var desc = "";
             switch (document.getElementById("socket_name").value) {
                 case "circle":
@@ -91,7 +91,7 @@
                         "desc": "group desc ",
                         "school": "school 0",
                         "grade": "grade 0",
-                        "area":"area 0"
+                        "area": "area 0"
                     };
                     break;
                 case "sGroup":
@@ -99,15 +99,49 @@
                     break;
                 case "getGroup":
                     tempData = {"id": "591a6e39b378425740131404"};
-                    break
+                    break;
+                case "repeater":
+                    tempData = {"u": "591a6e39b378425740131404", "skip": 0, "limit": 99};
+                    break;
+                case "ads":
+                    tempData = {};
+                    desc = "1)event:  ads2)显示图片是： post字段3）点击跳转到一个webview， webview的内容显示 url字段 连接的内容。";
+                    break;
+                case "homework":
+                    tempData = {"limit": 20, "skip": 0};
+                    desc = "说明： 作业有多个类型， 1） 考试类型 2） 简单文字类型（属于文章的），目前只做这两种类型"
+
+                    break;
+                case "grade":
+                    tempData = {"limit": 20, "skip": 0};
+                    desc = "获取年级信息";
+                    break;
+                case "examPaper":
+                    tempData = {"limit": 20, "skip": 0};
+                    desc = "首页中的考试";
+                    desc = "同步训练  专业科目   里面的二级菜单目前是两个：‘同步训练 ’ ‘教学辅导’1） 同步训练： 暂时显示试卷， 2） 教学辅导： 暂时显示 视频课程以后这个二级菜单， 是可变的， 是从后台获取一个数组，然后展示。 ";
+                    break;
+                case "lesson":
+                    tempData = {"limit": 20, "skip": 0};
+                    desc = "教学辅导  专业科目   里面的二级菜单目前是两个：‘同步训练 ’ ‘教学辅导’1） 同步训练： 暂时显示试卷， 2） 教学辅导： 暂时显示 视频课程以后这个二级菜单， 是可变的， 是从后台获取一个数组，然后展示。 ";
+                    break;
+                case "examPaperItem":
+                    tempData = {"limit": 20, "skip": 0};
+                    desc = "获取单个试卷的接口  event:  examPaperItemmsg:{id: '试卷的id'}";
+                    break;
+                case "point":
+                    tempData = {"limit": 20, "skip": 0};
+                    desc = "获取考点信息";
+                    break;
 
 
             }
             document.getElementById("socket_json").value = JSON.stringify(tempData);
-            document.getElementById("socket-desc").value = desc;
+            document.getElementById("socket-desc").innerHTML = desc;
         }
 
     </script>
+
     <style>
         .table {
             width: 100%;
@@ -184,8 +218,16 @@
     <option>newGroup</option>
     <option>sGroup</option>
     <option>getGroup</option>
+    <option>repeater</option>
+    <option>ads</option>
+    <option>homework</option>
+    <option>grade</option>
+    <option>point</option>
+    <option>examPaper</option>
+    <option>lesson</option>
+    <option>examPaperItem</option>
 </select>
-<b id="socket-desc"></b>
+<label id="socket-desc"></label>
 <textarea id="socket_json" class="socket-json"></textarea>
 <!--<button onclick="sendRequest()">send</button>-->
 <input onclick="do_beautify();" class="form-control input-lg btn-primary" type="button" value="do">
@@ -202,10 +244,10 @@
 
     var client = new OSS.Wrapper({
         region: 'oss-cn-beijing',
-        accessKeyId: 'id',
-        accessKeySecret: 'scree',
+        accessKeyId: 'LTAIQ6m3Kt0rBuqp',
+        accessKeySecret: '65Z92zqk9Fp19hRjt5qHfYuydY0JcU',
 //            stsToken: '<Your securityToken(STS)>',
-        bucket: 'bucket'
+        bucket: 'zhishi319'
     });
 
     client.list({
